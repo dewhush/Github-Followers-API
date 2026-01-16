@@ -1,0 +1,98 @@
+{
+    "github_token": "YOUR_GITHUB_TOKEN_HERE",
+    "telegram_bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+    "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID",
+    "check_interval_seconds": 300,
+    "cleanup_non_followers": true,
+    "cleanup_schedule": {
+        "enabled": true,
+        "specific_time": "00:00"
+    },
+    "followers_file": "followers.json",
+    "farming": {
+        "enabled": true,
+        "hourly_follow_limit": 40,
+        "smart_filtering": {
+            "enabled": true,
+            "min_following_count": 5,
+            "max_follower_ratio": 5.0,
+            "ignore_no_bio": false
+        },
+        "dynamic_targeting": {
+            "enabled": true,
+            "topics": [
+                "python",
+                "javascript",
+                "rust"
+            ],
+            "min_stars": 100
+        },
+        "farm_from_feed": {
+            "enabled": true,
+            "max_users": 20
+        },
+        "schedule": {
+            "enabled": true,
+            "interval_hours": 24
+        },
+        "delay_between_follows": 3,
+        "target_repos": [
+            "python/cpython",
+            "microsoft/vscode",
+            "torvalds/linux",
+            "facebook/react",
+            "vuejs/vue",
+            "vercel/next.js",
+            "tensorflow/tensorflow",
+            "pytorch/pytorch",
+            "nodejs/node",
+            "denoland/deno",
+            "rust-lang/rust",
+            "golang/go",
+            "django/django",
+            "laravel/laravel",
+            "spring-projects/spring-boot",
+            "docker/compose",
+            "kubernetes/kubernetes",
+            "git/git",
+            "neovim/neovim"
+        ],
+        "target_users": [
+            "github",
+            "torvalds",
+            "gvanrossum",
+            "tj",
+            "sindresorhus",
+            "kentcdodds",
+            "dan_abramov",
+            "evanw",
+            "youyuxi",
+            "rauchg",
+            "addyosmani",
+            "paulirish",
+            "getify",
+            "dhh",
+            "antirez",
+            "matz",
+            "sbfl",
+            "bradtraversy"
+        ]
+    },
+    "auto_star": {
+        "enabled": true,
+        "schedule": {
+            "enabled": true,
+            "specific_time": "00:00"
+        },
+        "daily_star_limit": 50,
+        "star_from_following": true,
+        "max_repos_per_user": 5,
+        "target_repos": [
+            "python/cpython",
+            "facebook/react",
+            "vuejs/vue",
+            "tensorflow/tensorflow",
+            "nodejs/node"
+        ]
+    }
+}
