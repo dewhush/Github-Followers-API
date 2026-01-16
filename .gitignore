@@ -1,6 +1,8 @@
 # Secrets
 .env
 .env.local
+*.key
+*.pem
 
 # Python
 __pycache__/
@@ -8,12 +10,11 @@ __pycache__/
 *$py.class
 *.log
 
-# Project Stats (Optional - remove if you want to track stats)
-# cleanup_stats.json
-# farming_stats.json
-# star_stats.json
-# followers.json
-# starred_repos.json
+# Stats & Private Data
+config.json
+followers.json
+starred_repos.json
+*_stats.json
 
 # IDE
 .vscode/

@@ -1,75 +1,187 @@
-# GitHub Auto-Follow API
+# GitHub Followers API
 
+![Created by dewhush](https://img.shields.io/badge/Created%20by-dewhush-blue)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 
-A powerful, secure, and automated tool to grow your GitHub network organically. Now refactored into a lightweight REST API.
+A powerful, secure REST API for automating GitHub follower management. Follow back new followers, farm followers from popular repositories, and cleanup non-followers - all through a simple API.
 
 ## ✨ Features
 
-- **Auto-Follow Back**: Automatically follows users who follow you.
-- **Smart Farming**: Finds and follows active users from trending repos and your network.
-- **Auto-Star**: Automatically stars repositories from your network.
-- **Scheduled Cleanup**: Unfollows users who don't follow back after a set period.
-- **Secure**: All credentials are stored safely in `.env`, not in code.
-- **REST API**: Control the bot remotely via simple HTTP endpoints.
+- **Auto-Follow Back** - Automatically follows users who follow you
+- **Smart Farming** - Finds and follows active users from trending repos
+- **Scheduled Cleanup** - Unfollows users who don't follow back
+- **Telegram Notifications** - Get reports via Telegram (optional)
+- **API Key Protection** - Secure your API with header-based authentication
+- **REST API** - Control everything via HTTP endpoints
+
+---
 
 ## 🚀 Quick Start
 
-### 1. Setup
+### 1. Install Dependencies
 
-**Install Dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Configure Credentials:**
-1. Copy `.env.example` to `.env`:
-   ```bash
-   copy .env.example .env
-   ```
-2. Open `.env` and add your keys:
-   - `GITHUB_TOKEN`: Generate from [GitHub Settings > Developer settings > PATs](https://github.com/settings/tokens).
-   - `TELEGRAM_BOT_TOKEN`: Get from @BotFather (Optional).
-   - `TELEGRAM_CHAT_ID`: Your Telegram User ID (Optional).
+### 2. Configure Environment
 
-### 2. Run the API
+Copy the example environment file:
 
-Double-click `run_api.bat` or run:
 ```bash
-uvicorn api:app --reload
+copy .env.example .env
 ```
 
-The API will start at `http://127.0.0.1:8000`.
+Edit `.env` with your credentials:
 
-### 3. Usage
+```env
+APP_NAME=GitHub-Followers-API
+APP_ENV=development
+API_KEY=your_secret_api_key
 
-Visit the interactive documentation at **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**.
+GITHUB_TOKEN=your_github_token
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token  # Optional
+TELEGRAM_CHAT_ID=your_chat_id               # Optional
+```
 
-**Endpoints:**
-- `POST /start`: Start the farming background loop.
-- `POST /stop`: Stop the farming background loop.
-- `GET /status`: Check if the bot is running and view stats.
-- `GET /config`: View current configuration limits.
+> **Get your GitHub Token:** [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
 
-## ⚙️ Configuration
+### 3. Configure Bot (Optional)
 
-Edit `config.json` to tweak farming behavior:
-- `hourly_follow_limit`: Max follows per hour.
-- `target_repos`: List of repositories to farm followers from.
-- `smart_filtering`: Criteria for who to follow (ratio, bio, etc).
+Copy and edit `config.example.json` to `config.json`:
+
+```json
+{
+  "farming": {
+    "enabled": true,
+    "target_repos": ["torvalds/linux", "facebook/react"],
+    "daily_follow_limit": 100
+  },
+  "cleanup_non_followers": true
+}
+```
+
+### 4. Run the API
+
+**Option A:** Double-click `run_api.bat`
+
+**Option B:** Run manually:
+
+```bash
+uvicorn api:app --reload --host 0.0.0.0 --port 8000
+```
+
+The API will start at `http://127.0.0.1:8000`
+
+---
+
+## 📖 API Documentation
+
+### Interactive Docs
+
+Access the Swagger UI: **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
+
+### Authentication
+
+Protected endpoints require the `X-API-Key` header:
+
+```bash
+curl -H "X-API-Key: your_api_key" http://127.0.0.1:8000/v1/start -X POST
+```
+
+### Endpoints
+
+#### Public Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| GET | `/status` | Get bot status and stats |
+
+#### Protected Endpoints (require `X-API-Key`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/v1/config` | View current configuration |
+| POST | `/v1/start` | Start background farming loop |
+| POST | `/v1/stop` | Stop background farming loop |
+| POST | `/v1/follow-back` | Trigger manual follow-back check |
+| POST | `/v1/cleanup` | Trigger manual cleanup |
+| POST | `/v1/farm` | Trigger one farming cycle |
+
+### Example Responses
+
+**GET /health**
+
+```json
+{
+  "status": "ok",
+  "app_name": "GitHub-Followers-API",
+  "environment": "development"
+}
+```
+
+**GET /status**
+
+```json
+{
+  "status": "Stopped",
+  "is_running": false,
+  "authenticated_as": "your-username",
+  "stats": {
+    "followed_count": 150,
+    "farming_stats": {
+      "today": "2026-01-17",
+      "follows_today": 25,
+      "total_farmed": 500
+    }
+  }
+}
+```
+
+**POST /v1/start**
+
+```json
+{
+  "message": "✅ Farming started in background",
+  "success": true
+}
+```
+
+---
 
 ## 🛡️ Security
 
-- **NEVER** commit your `.env` file to GitHub.
-- This project uses `.gitignore` to prevent secret leakage.
-- If you suspect a leak, revoke your GitHub token immediately.
+- **NEVER** commit your `.env` file to GitHub
+- All sensitive data uses `os.getenv()`
+- API Key protection via `X-API-Key` header
+- `.gitignore` excludes all secret files
+
+If you suspect a token leak, [revoke it immediately](https://github.com/settings/tokens).
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── api.py              # FastAPI application & endpoints
+├── core.py             # Bot logic (follow, farm, cleanup)
+├── requirements.txt    # Python dependencies
+├── .env.example        # Environment template
+├── config.example.json # Bot configuration template
+├── run_api.bat         # Windows startup script
+├── .gitignore          # Git exclusions
+└── README.md           # This file
+```
+
+---
 
 ## 👤 Credits
 
-**Created by: dewhush**  
-*Refactored for Security & Performance*
+**Created by: dewhush**
 
 ---
-*Disclaimer: Use responsibly. GitHub has strict anti-spam policies. Aggressive settings may get your account flagged.*
+
+*⚠️ Disclaimer: Use responsibly. GitHub has anti-spam policies. Aggressive settings may get your account flagged.*
