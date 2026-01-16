@@ -1,7 +1,7 @@
 {
   "today": "2026-01-17",
-  "follows_today": 141,
-  "total_farmed": 3883,
+  "follows_today": 160,
+  "total_farmed": 3902,
   "sources": {
     "repo_stars:python/cpython": 438,
     "repo_stars:microsoft/vscode": 409,
@@ -16,7 +16,7 @@
     "repo_stars:OxidizeLabs/cachekit": 20,
     "repo_stars:runesatsdev/polymarket-arbitrage-bot": 34,
     "repo_stars:pytorch/pytorch": 100,
-    "repo_stars:nodejs/node": 81,
+    "repo_stars:nodejs/node": 100,
     "repo_stars:denoland/deno": 80,
     "repo_stars:rust-lang/rust": 80,
     "repo_stars:golang/go": 80,
